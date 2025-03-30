@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Cache node_modules
         id: cache-node-modules
@@ -76,10 +77,3 @@ jobs:
           script: |
             adb install android/app/build/outputs/apk/release/app-release.apk
             maestro test --format=junit --output=report.xml --no-ansi .maestro
-
-      - name: Run Maestro Tests
-        uses: dniHze/maestro-test-action@v1
-        with:
-          app-file: android/app/build/outputs/apk/release/app-release.apk
-          flow: .maestro
-          report: report.xml
