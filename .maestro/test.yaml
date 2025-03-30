@@ -1,0 +1,4 @@
+appId: com.awesomeproject
+---
+- launchApp
+- assertVisible: "Edit App.tsx to change this screen and then come back to see your edits."

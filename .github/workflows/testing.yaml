@@ -1,0 +1,59 @@
+name: Run Maestro Tests on Android
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  android-maestro-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install Dependencies
+        run: npm install
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+
+      - name: Build Android Release APK
+        run: |
+          cd android
+          ./gradlew assembleRelease
+
+      - name: Start Android Emulator
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          profile: pixel_3
+          avd-name: test-emulator
+          ram-size: 2048M
+          disk-size: 6G
+          heap-size: 512M
+          disable-animations: true
+          enable-hw-keyboard: true
+
+      - name: Run Maestro Tests
+        uses: dniHze/maestro-test-action@v1
+        with:
+          app-file: android/app/build/outputs/apk/release/app-release.apk
+          flow: .maestro
+          report: report.xml
