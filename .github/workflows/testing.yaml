@@ -73,7 +73,9 @@ jobs:
           arch: x86_64
           ram-size: 2048M
           target: default
-          script: ./gradlew connectedCheck
+          script: |
+            adb install android/app/build/outputs/apk/release/app-release.apk
+            maestro test --format=junit --output=report.xml --no-ansi .maestro
 
       - name: Run Maestro Tests
         uses: dniHze/maestro-test-action@v1
