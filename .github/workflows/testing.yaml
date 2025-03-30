@@ -66,18 +66,12 @@ jobs:
           ./gradlew assembleRelease
 
       - name: Start Android Emulator
-        uses: ReactiveCircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
-          target: google_apis
           arch: x86_64
-          profile: pixel_3
-          avd-name: test-emulator
           ram-size: 2048M
-          disk-size: 6G
-          heap-size: 512M
-          disable-animations: true
-          enable-hw-keyboard: true
+          target: default
           script: maestro test --format=junit --output=report.xml --no-ansi .maestro
 
       - name: Run Maestro Tests
