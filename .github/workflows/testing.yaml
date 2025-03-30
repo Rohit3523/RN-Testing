@@ -78,6 +78,7 @@ jobs:
           heap-size: 512M
           disable-animations: true
           enable-hw-keyboard: true
+          script: maestro test --format=junit --output=report.xml --no-ansi .maestro
 
       - name: Run Maestro Tests
         uses: dniHze/maestro-test-action@v1
