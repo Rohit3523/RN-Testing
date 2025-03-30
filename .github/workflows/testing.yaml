@@ -87,7 +87,7 @@ jobs:
             maestro test --format=junit --output=report.xml --no-ansi .maestro
 
       - name: Upload Test Report
-        uses: actions/upload-test-results@v3
+        uses: actions/upload-artifact@v4
         with:
           title: Android Test Report
           path: report.xml
